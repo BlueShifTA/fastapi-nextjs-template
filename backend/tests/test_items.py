@@ -6,7 +6,9 @@ client = TestClient(app)
 
 
 def test_create_item() -> None:
-    response = client.post("/api/items", json={"name": "Test Item", "description": "A test"})
+    response = client.post(
+        "/api/items", json={"name": "Test Item", "description": "A test"}
+    )
     assert response.status_code == 201
     data = response.json()
     assert data["name"] == "Test Item"
@@ -17,7 +19,7 @@ def test_create_item() -> None:
 def test_list_items() -> None:
     # Create an item first
     client.post("/api/items", json={"name": "List Test"})
-    
+
     response = client.get("/api/items")
     assert response.status_code == 200
     data = response.json()
@@ -28,7 +30,7 @@ def test_get_item() -> None:
     # Create an item
     create_response = client.post("/api/items", json={"name": "Get Test"})
     item_id = create_response.json()["id"]
-    
+
     response = client.get(f"/api/items/{item_id}")
     assert response.status_code == 200
     assert response.json()["name"] == "Get Test"
@@ -43,11 +45,11 @@ def test_delete_item() -> None:
     # Create an item
     create_response = client.post("/api/items", json={"name": "Delete Test"})
     item_id = create_response.json()["id"]
-    
+
     # Delete it
     response = client.delete(f"/api/items/{item_id}")
     assert response.status_code == 204
-    
+
     # Verify it's gone
     get_response = client.get(f"/api/items/{item_id}")
     assert get_response.status_code == 404

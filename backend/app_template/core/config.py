@@ -1,9 +1,9 @@
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings  # type: ignore
 
 
-class Settings(BaseSettings):
+class Settings(BaseSettings):  # type: ignore
     """Application settings loaded from environment variables."""
 
     APP_NAME: str = "App Template"
