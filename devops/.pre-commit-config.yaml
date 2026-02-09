@@ -20,3 +20,15 @@ repos:
         entry: bash -c "PYTHONPATH=backend uv run mypy backend/app_template"
         language: system
         pass_filenames: false
+
+      - id: frontend-eslint-fix
+        name: frontend eslint fix
+        entry: bash -c "cd frontend && npm run lint -- --fix"
+        language: system
+        pass_filenames: false
+
+      - id: frontend-eslint-check
+        name: frontend eslint check
+        entry: bash -c "cd frontend && npm run lint"
+        language: system
+        pass_filenames: false
