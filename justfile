@@ -128,6 +128,40 @@ export-openapi:
   curl -s http://127.0.0.1:8000/openapi.json | python -m json.tool > openapi.json
 
 [group('util')]
+[doc("Create and push git tag: `just tag 0.0.1` or auto-increment with `just tag`")]
+tag version="":
+  @set -eu; \
+  git fetch --tags --quiet; \
+  input="{{version}}"; \
+  if [ -n "$$input" ]; then \
+    case "$$input" in \
+      v*) tag="$$input" ;; \
+      *) tag="v$$input" ;; \
+    esac; \
+  else \
+    latest_tag="$$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -n 1)"; \
+    if [ -z "$$latest_tag" ]; then \
+      tag="v0.0.1"; \
+    else \
+      next_patch="$$(echo "$${latest_tag#v}" | awk -F. '{print $$1 "." $$2 "." $$3+1}')"; \
+      tag="v$$next_patch"; \
+    fi; \
+    printf "Create and push tag %s? [y/N] " "$$tag"; \
+    read -r answer; \
+    case "$$answer" in \
+      y|Y|yes|YES) ;; \
+      *) echo "Aborted."; exit 0 ;; \
+    esac; \
+  fi; \
+  if git show-ref --tags --verify --quiet "refs/tags/$$tag"; then \
+    echo "Tag $$tag already exists locally."; \
+    exit 1; \
+  fi; \
+  git tag "$$tag"; \
+  git push origin "$$tag"; \
+  echo "Pushed $$tag"
+
+[group('util')]
 clean:
   rm -rf .venv .mypy_cache .ruff_cache .pytest_cache __pycache__ .coverage coverage.xml
   rm -rf frontend/.next frontend/node_modules

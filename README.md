@@ -71,6 +71,8 @@ just test-cov 80  # Run tests with 80% coverage threshold
 just run-ci       # Run CI-equivalent checks locally
 just lint         # Run all linters
 just typecheck    # Run mypy
+just tag 0.0.1    # Create and push tag v0.0.1
+just tag          # Auto-increment latest patch tag (with confirmation)
 just docker-build # Build Docker images
 just docker-up    # Start containers
 just docker-prod  # Build & run production mode
