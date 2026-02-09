@@ -11,8 +11,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # Copy dependency files
 COPY pyproject.toml uv.lock* ./
 
-# Install dependencies (no dev deps in production)
-RUN uv sync --frozen --no-dev --no-install-project
+# Install runtime dependencies only
+RUN uv sync --frozen --no-group dev --no-group test --no-install-project
 
 # ─────────────────────────────────────────────────────────────
 # Backend production image
@@ -21,8 +21,7 @@ FROM backend-base AS backend
 
 COPY backend/ ./backend/
 
-# Install the project itself
-RUN uv sync --frozen --no-dev
+# Project install is not required; app is imported via PYTHONPATH
 
 ENV PYTHONPATH=/app/backend
 ENV PATH="/app/.venv/bin:$PATH"
