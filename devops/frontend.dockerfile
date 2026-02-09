@@ -7,7 +7,7 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm ci --only=production=false
+RUN npm ci
 
 # Build stage
 FROM node:22-alpine AS builder
@@ -15,6 +15,8 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ ./
+# Ensure public exists so runner COPY succeeds even when the repo has no public assets
+RUN mkdir -p /app/public
 
 # Build-time env vars
 ARG NEXT_PUBLIC_API_BASE_URL
