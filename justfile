@@ -94,6 +94,25 @@ typecheck:
   PYTHONPATH=backend uv run mypy backend/app_template
 
 # ─────────────────────────────────────────────────────────────
+# Template / AI Docs
+# ─────────────────────────────────────────────────────────────
+
+[group('template')]
+[doc("Customize template placeholders and package name")]
+bootstrap:
+  uv run python scripts/bootstrap.py
+
+[group('template')]
+[doc("Mark template cleanup and print follow-up tasks")]
+template-clean:
+  uv run python scripts/template_clean.py
+
+[group('template')]
+[doc("Regenerate ProjectMap.md for fast agent search")]
+project-map:
+  uv run python scripts/generate_project_map.py
+
+# ─────────────────────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────────────────────
 
