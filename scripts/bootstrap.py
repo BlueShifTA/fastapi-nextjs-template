@@ -45,7 +45,9 @@ def main() -> int:
     dst_dir = ROOT / f"backend/{package_name}"
     if src_dir.exists() and dst_dir != src_dir:
         if args.dry_run:
-            print(f"would rename {src_dir.relative_to(ROOT)} -> {dst_dir.relative_to(ROOT)}")
+            print(
+                f"would rename {src_dir.relative_to(ROOT)} -> {dst_dir.relative_to(ROOT)}"
+            )
         else:
             shutil.move(str(src_dir), str(dst_dir))
             print(f"renamed {src_dir.relative_to(ROOT)} -> {dst_dir.relative_to(ROOT)}")
